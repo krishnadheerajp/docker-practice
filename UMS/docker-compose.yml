@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: pg-cont
+    environment:
+      - POSTGRES_PASSWORD=test
+    ports:
+      - '5433:5432'
+    networks:
+      - fs-app
+    
+  backend:
+    build: ./backend
+    container_name: node-app-cont
+    ports:
+      - '8001:3000'
+    depends_on:
+      - postgres
+    networks:
+      - fs-app
+
+  frontend:
+    build: ./frontend
+    container_name: react-app-cont
+    ports:
+      - '5174:5173'
+    networks:
+      - fs-app
+    
+networks:
+  fs-app:
+    driver: bridge
